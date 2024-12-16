@@ -1,0 +1,94 @@
+import '../screens/deals_screen.dart';
+import '../screens/food_list_screen.dart';
+import '../screens/redeem_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/personal_info_screen.dart';
+import 'package:flutter/material.dart';
+
+// This is the main screen which has top and bottom tool bar
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  List<Widget> screens = [  //List of screens
+    const HomeScreen(),
+    const DealsScreen(),
+    const RedeemScreen(),
+    const FoodListScreen(),
+  ];
+
+  int currentScreen = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(  //Provide main frame
+      appBar: AppBar( //Frame for top tool bar
+        backgroundColor: Colors.black,
+        toolbarHeight: 70.0,
+        leading: IconButton(
+          icon: const Icon( //When clicked redirect to user's personal information
+            Icons.person_pin,
+            size: 60.0,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PersonalInfo()),
+              );
+            });
+          },
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget> [
+            Image.asset('assets/logo.ico',  //Display the logo image
+              width: 70.0,
+              height: 70.0,
+              fit: BoxFit.cover,
+            ),
+            const SizedBox(width: 10),
+          ],
+        )
+        ,
+      ),
+
+
+      body: screens[currentScreen], //This is the where the current screen is shown
+
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.red[900],
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        child: ClipRRect( //Frame for the bottom navigation/ tool bar
+          borderRadius: BorderRadius.circular(18.0),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: currentScreen,
+            backgroundColor: const Color(0x00ffffff),
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.white,
+            onTap: (value) {
+              setState(() {
+                currentScreen = value;
+                print("Current screen : $currentScreen");
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'), //Clicked => Home Screen
+              BottomNavigationBarItem(icon: Icon(Icons.discount), label: 'Deals'),  //Clicked => Deals Screen
+              BottomNavigationBarItem(icon: Icon(Icons.redeem), label: 'Redeem'), //Clicked => Redeem Screen
+              BottomNavigationBarItem(icon: Icon(Icons.restaurant_menu), label: 'Food'),  //Clicked => Food List Screen
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
